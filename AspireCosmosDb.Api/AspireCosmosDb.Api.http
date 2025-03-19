@@ -1,6 +1,6 @@
 @AspireCosmosDb.Api_HostAddress = http://localhost:5099
 
-GET {{AspireCosmosDb.Api_HostAddress}}/weatherforecast/
+GET {{AspireCosmosDb.Api_HostAddress}}/entries/
 Accept: application/json
 
 ###
