@@ -7,7 +7,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var cosmos = builder.AddAzureCosmosDB("cosmos-db");
 var db = cosmos.AddCosmosDatabase("db");
-db.AddContainer("Entry", "/Id");
+db.AddContainer("Entry", "/SchemaId");
+db.AddContainer("Schema", "/Id");
 
 if (builder.Environment.IsDevelopment())
 {

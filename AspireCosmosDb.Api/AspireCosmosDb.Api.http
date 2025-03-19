@@ -1,6 +1,19 @@
 @AspireCosmosDb.Api_HostAddress = http://localhost:5099
 
-GET {{AspireCosmosDb.Api_HostAddress}}/entries/
+# Test the GET /entries endpoint
+GET {{AspireCosmosDb.Api_HostAddress}}/entries
 Accept: application/json
 
 ###
+
+# Test the POST /entries endpoint
+POST {{AspireCosmosDb.Api_HostAddress}}/entries
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "name": "Sample Entry Name",  // Replace with the actual name
+  "schemaId": "00000000-0000-0000-0000-000000000000"
+}
+
+Accept: application/json

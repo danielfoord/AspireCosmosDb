@@ -1,10 +1,9 @@
 using AspireCosmosDb.Api;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -23,18 +22,24 @@ app.UseHttpsRedirection();
 
 app.MapGet("/entries", async (CosmosDbContext dbContext) =>
 {
-    using (dbContext)
-    {
-        var entries = await dbContext.Entries.ToListAsync();
-        return entries;
-    }
+    return await dbContext.Entries.ToListAsync();
 })
 .WithName("get_entries")
 .WithOpenApi();
 
-app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+app.MapPost("/entries", async (
+    CosmosDbContext dbContext, 
+    [FromBody] Entry entry, 
+    CancellationToken cancellationToken) =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    // Add the entry to the database
+    await dbContext.Entries.AddAsync(entry, cancellationToken);
+    await dbContext.SaveChangesAsync(cancellationToken);
+
+    // Return a 201 Created response with the entry
+    return Results.Created($"/entries/{entry.Id}", entry);
+})
+.WithName("post_entries")
+.WithOpenApi();
+
+app.Run();
