@@ -11,7 +11,6 @@ builder.AddCosmosDbContext<CosmosDbContext>("cosmos-db", "db");
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -32,11 +31,8 @@ app.MapPost("/entries", async (
     [FromBody] Entry entry, 
     CancellationToken cancellationToken) =>
 {
-    // Add the entry to the database
     await dbContext.Entries.AddAsync(entry, cancellationToken);
     await dbContext.SaveChangesAsync(cancellationToken);
-
-    // Return a 201 Created response with the entry
     return Results.Created($"/entries/{entry.Id}", entry);
 })
 .WithName("post_entries")
